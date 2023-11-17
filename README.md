@@ -31,4 +31,4 @@ Utiliser le fichier *.postman_collection.json* et mettre ça dans postman pour t
 
 ## Auteur
 
-**Clément KERVICHE**
+**Clément KERVICHE** - [Github](https://github.com/clement-krv) - [LinkedIn](https://www.linkedin.com/in/clément-kerviche-6b7a44262/)
