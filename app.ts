@@ -12,8 +12,15 @@ interface User {
   role: 'STUDENT' | 'ADMIN';
 }
 
+interface Course {
+  id?: number;
+  title: string;
+  date: string;
+}
+
 interface DBSchema {
   users: User[];
+  courses: Course[];
 }
 
 const adapter = new FileSync<DBSchema>('db.json');
@@ -46,6 +53,11 @@ const userSchema = yup.object().shape({
   email: yup.string().email().required().defined(),
   password: yup.string().required().defined(),
   role: yup.string().oneOf(['STUDENT', 'ADMIN']).required().defined(),
+}).noUnknown().strict().required().defined();
+
+const courseSchema = yup.object().shape({
+  title: yup.string().required().defined(),
+  date: yup.string().matches(/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/, 'La date doit être au format jj/mm/AAAA').required().defined(),
 }).noUnknown().strict().required().defined();
 
 function checkRole(role: string) {
@@ -92,6 +104,38 @@ app.post('/add-users', checkRole('ADMIN'), async (req, res) => {
 
   // Renvoyez une réponse de succès
   res.status(201).send({ message: 'Utilisateur ajouté avec succès' });
+});
+
+app.get('/courses', (req, res) => {
+  const courses = db.get('courses').value();
+  res.status(200).send(courses);
+});
+
+app.post('/add-courses', checkRole('ADMIN'), (req, res) => {
+  let newCourse: Course;
+
+  try {
+    newCourse = courseSchema.validateSync(req.body);
+  } catch (error) {
+    if (error instanceof yup.ValidationError) {
+      return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
+    }
+    // handle other types of errors
+    return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
+  }
+
+  // Supprimez les champs inconnus
+  newCourse = courseSchema.cast(newCourse);
+
+  // Générez un nouvel ID pour le nouveau cours
+  const newId = db.get('courses').size().value() + 1;
+  newCourse.id = newId;
+
+  // Ajoutez le nouveau cours à la base de données
+  db.get('courses').push(newCourse).write();
+
+  // Renvoyez une réponse de succès
+  res.status(201).send({ message: 'Cours ajouté avec succès' });
 });
 
 app.listen(3000, () => {

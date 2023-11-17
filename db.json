@@ -11,6 +11,19 @@
       "password": "student",
       "role": "STUDENT",
       "id": 2
+    },
+    {
+      "email": "test@student",
+      "password": "student",
+      "role": "STUDENT",
+      "id": 3
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "title": "Angular",
+      "date": "01-01-2018"
     }
   ]
 }
