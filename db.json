@@ -2,20 +2,9 @@
   "users": [
     {
       "id": 1,
-      "email": "user1@example.com",
-      "password": "password1",
-      "role": "STUDENT"
-    },
-    {
-      "id": 2,
       "email": "admin@admin.fr",
       "password": "admin",
       "role": "ADMIN"
-    },
-    {
-      "email": "1@1.Fr",
-      "password": "test",
-      "role": "STUDENT"
     }
   ]
 }
