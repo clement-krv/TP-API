@@ -1,16 +1,21 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "email": "user1@example.com",
-            "password": "password1",
-            "role": "student"
-        },
-        {
-            "id": 2,
-            "email": "user2@example.com",
-            "password": "password2",
-            "role": "admin"
-        }
-        ]
+  "users": [
+    {
+      "id": 1,
+      "email": "user1@example.com",
+      "password": "password1",
+      "role": "STUDENT"
+    },
+    {
+      "id": 2,
+      "email": "admin@admin.fr",
+      "password": "admin",
+      "role": "ADMIN"
+    },
+    {
+      "email": "1@1.Fr",
+      "password": "test",
+      "role": "STUDENT"
+    }
+  ]
 }
