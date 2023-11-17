@@ -19,7 +19,6 @@ interface DBSchema {
 const adapter = new FileSync<DBSchema>('db.json');
 const db: LowdbSync<DBSchema> = low(adapter);
 
-
 const app = express();
 app.use(bodyParser.json());
 
@@ -35,17 +34,34 @@ app.use(basicAuth({
   unauthorizedResponse: 'Nom d\'utilisateur ou mot de passe incorrect',
 }));
 
+app.use((req: any, res, next) => {
+  const authenticatedUser = users.find(user => user.email === req.auth.user);
+  if (authenticatedUser) {
+    req.user = authenticatedUser;
+  }
+  next();
+});
+
 const userSchema = yup.object().shape({
   email: yup.string().email().required().defined(),
   password: yup.string().required().defined(),
   role: yup.string().oneOf(['STUDENT', 'ADMIN']).required().defined(),
 }).noUnknown().strict().required().defined();
 
+function checkRole(role: string) {
+  return (req: any, res: any, next: any) => {
+    if (req.user.role !== role) {
+      return res.status(403).send({ message: 'Accès refusé' });
+    }
+    next();
+  };
+}
+
 app.get('/', (req, res) => {
   res.status(200).send({ message: 'Vous êtes connecté!' });
 });
 
-app.post('/add-users', async (req, res) => {
+app.post('/add-users', checkRole('ADMIN'), async (req, res) => {
   let newUser: User;
 
   try {
@@ -78,4 +94,6 @@ app.post('/add-users', async (req, res) => {
   res.status(201).send({ message: 'Utilisateur ajouté avec succès' });
 });
 
-app.listen(3000, () => console.log('Serveur en écoute sur le port 3000'));
+app.listen(3000, () => {
+  console.log('Server is listening on port 3000');
+});

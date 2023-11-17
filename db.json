@@ -5,6 +5,12 @@
       "email": "admin@admin.fr",
       "password": "admin",
       "role": "ADMIN"
+    },
+    {
+      "email": "student@student.fr",
+      "password": "student",
+      "role": "STUDENT",
+      "id": 2
     }
   ]
 }
