@@ -21,9 +21,10 @@
   ],
   "courses": [
     {
-      "id": 1,
-      "title": "Angular",
-      "date": "01-01-2018"
+      "title": "test",
+      "date": "01-01-2001",
+      "heure": "18:00",
+      "id": 2
     }
   ]
 }

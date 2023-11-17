@@ -16,6 +16,7 @@ interface Course {
   id?: number;
   title: string;
   date: string;
+  heure: string;
 }
 
 interface DBSchema {
@@ -58,6 +59,7 @@ const userSchema = yup.object().shape({
 const courseSchema = yup.object().shape({
   title: yup.string().required().defined(),
   date: yup.string().matches(/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/, 'La date doit être au format jj/mm/AAAA').required().defined(),
+  heure: yup.string().matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'L\'heure doit être au format HH:MM en 24 heures').required().defined(),
 }).noUnknown().strict().required().defined();
 
 function checkRole(role: string) {
