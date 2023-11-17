@@ -13,7 +13,7 @@
       "id": 2
     },
     {
-      "email": "test@student",
+      "email": "test@student.fr",
       "password": "student",
       "role": "STUDENT",
       "id": 3
@@ -35,16 +35,11 @@
   ],
   "studentCourses": [
     {
-      "id": 1,
-      "studentId": 2,
-      "courseId": 1
-    },
-    {
       "signedAt": null,
-      "registeredAt": "17/11/2023 16:33",
+      "registeredAt": "17/11/2023 16:49",
       "courseId": 2,
       "studentId": 3,
-      "id": 2
+      "id": 1
     }
   ]
 }

@@ -162,6 +162,12 @@ app.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
     registeredAt: new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
   };
 
+  // Vérifiez que studentId correspond à un utilisateur avec le rôle STUDENT
+  const student = db.get('users').find({ id: newStudentCourse.studentId, role: 'STUDENT' }).value();
+  if (!student) {
+    return res.status(400).send({ message: 'L\'ID fourni ne correspond pas à un étudiant' });
+  }
+
   try {
     newStudentCourse = studentCourseSchema.validateSync(newStudentCourse);
   } catch (error) {
@@ -202,6 +208,37 @@ app.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
 
   // Renvoyez une réponse de succès
   res.status(201).send({ message: 'Inscription de l\'étudiant au cours ajoutée avec succès' });
+});
+
+app.patch('/sign-course', checkRole('STUDENT'), (req, res) => {
+  const { studentId, courseId } = req.body;
+
+  // Vérifiez que studentId correspond à l'utilisateur connecté
+  const user = (req as any).user;
+  if (user && user.id !== studentId) {
+    return res.status(403).send({ message: 'Vous ne pouvez signer que vos propres cours' });
+  }
+  // Trouvez le cours correspondant pour l'étudiant
+  let studentCourse = db.get('studentCourses').find({ studentId, courseId }).value();
+
+  // Si le cours n'existe pas, renvoyez une erreur
+  if (!studentCourse) {
+    return res.status(400).send({ message: 'Le cours avec cet ID n\'existe pas pour cet étudiant' });
+  }
+
+  // Si le cours a déjà été signé, renvoyez une erreur
+  if (studentCourse.signedAt) {
+    return res.status(400).send({ message: 'Le cours a déjà été signé' });
+  }
+
+  // Mettez à jour le champ signedAt avec la date et l'heure actuelles
+  studentCourse.signedAt = new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+  // Mettez à jour le cours dans la base de données
+  db.get('studentCourses').find({ studentId, courseId }).assign(studentCourse).write();
+
+  // Renvoyez une réponse de succès
+  res.status(200).send({ message: 'Cours signé avec succès' });
 });
 
 app.listen(3000, () => {
