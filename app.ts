@@ -1,8 +1,8 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import basicAuth from 'express-basic-auth';
-import low, { LowdbSync } from 'lowdb';
-import FileSync from 'lowdb/adapters/FileSync';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as basicAuth from 'express-basic-auth';
+import * as low from 'lowdb';
+import * as FileSync from 'lowdb/adapters/FileSync';
 import * as yup from 'yup';
 
 interface User {
@@ -100,27 +100,21 @@ app.post('/add-users', checkRole('ADMIN'), async (req, res) => {
     if (error instanceof yup.ValidationError) {
       return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
     }
-    // handle other types of errors
     return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
-  // Supprimez les champs inconnus
   newUser = userSchema.cast(newUser);
 
-  // Vérifiez que l'utilisateur n'existe pas déjà
   const existingUser = db.get('users').find({ email: newUser.email }).value();
   if (existingUser) {
     return res.status(409).send({ message: 'Un utilisateur avec cet email existe déjà' });
   }
 
-  // Générez un nouvel ID pour le nouvel utilisateur
   const newId = db.get('users').size().value() + 1;
   newUser.id = newId;
 
-  // Ajoutez le nouvel utilisateur à la base de données
   db.get('users').push(newUser).write();
 
-  // Renvoyez une réponse de succès
   res.status(201).send({ message: 'Utilisateur ajouté avec succès' });
 });
 
@@ -138,21 +132,16 @@ app.post('/add-courses', checkRole('ADMIN'), (req, res) => {
     if (error instanceof yup.ValidationError) {
       return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
     }
-    // handle other types of errors
     return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
-  // Supprimez les champs inconnus
   newCourse = courseSchema.cast(newCourse);
 
-  // Générez un nouvel ID pour le nouveau cours
   const newId = db.get('courses').size().value() + 1;
   newCourse.id = newId;
 
-  // Ajoutez le nouveau cours à la base de données
   db.get('courses').push(newCourse).write();
 
-  // Renvoyez une réponse de succès
   res.status(201).send({ message: 'Cours ajouté avec succès' });
 });
 
@@ -162,7 +151,6 @@ app.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
     registeredAt: new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
   };
 
-  // Vérifiez que studentId correspond à un utilisateur avec le rôle STUDENT
   const student = db.get('users').find({ id: newStudentCourse.studentId, role: 'STUDENT' }).value();
   if (!student) {
     return res.status(400).send({ message: 'L\'ID fourni ne correspond pas à un étudiant' });
@@ -174,70 +162,55 @@ app.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
     if (error instanceof yup.ValidationError) {
       return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
     }
-    // handle other types of errors
     return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
-  // Supprimez les champs inconnus
   newStudentCourse = studentCourseSchema.cast(newStudentCourse);
 
-  // Vérifiez que le courseId existe
   const existingCourse = db.get('courses').find({ id: newStudentCourse.courseId }).value();
   if (!existingCourse) {
     return res.status(400).send({ message: 'Le cours avec cet ID n\'existe pas' });
   }
 
-  // Vérifiez que le studentId existe
   const existingUser = db.get('users').find({ id: newStudentCourse.studentId }).value();
   if (!existingUser) {
     return res.status(400).send({ message: 'L\'utilisateur avec cet ID n\'existe pas' });
   }
 
-  // Générez un nouvel ID pour le nouveau StudentCourse
   const newId = db.get('studentCourses').value().length + 1;
   newStudentCourse.id = newId;
 
-  // Définissez registeredAt à la date et l'heure actuelles
   const now = new Date();
   const date = now.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const time = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
   newStudentCourse.registeredAt = `${date} ${time}`;
 
-  // Ajoutez le nouveau StudentCourse à la base de données
   db.get('studentCourses').push(newStudentCourse).write();
 
-  // Renvoyez une réponse de succès
   res.status(201).send({ message: 'Inscription de l\'étudiant au cours ajoutée avec succès' });
 });
 
 app.patch('/sign-course', checkRole('STUDENT'), (req, res) => {
   const { studentId, courseId } = req.body;
 
-  // Vérifiez que studentId correspond à l'utilisateur connecté
   const user = (req as any).user;
   if (user && user.id !== studentId) {
     return res.status(403).send({ message: 'Vous ne pouvez signer que vos propres cours' });
   }
-  // Trouvez le cours correspondant pour l'étudiant
   let studentCourse = db.get('studentCourses').find({ studentId, courseId }).value();
 
-  // Si le cours n'existe pas, renvoyez une erreur
   if (!studentCourse) {
     return res.status(400).send({ message: 'Le cours avec cet ID n\'existe pas pour cet étudiant' });
   }
 
-  // Si le cours a déjà été signé, renvoyez une erreur
   if (studentCourse.signedAt) {
     return res.status(400).send({ message: 'Le cours a déjà été signé' });
   }
 
-  // Mettez à jour le champ signedAt avec la date et l'heure actuelles
   studentCourse.signedAt = new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  // Mettez à jour le cours dans la base de données
   db.get('studentCourses').find({ studentId, courseId }).assign(studentCourse).write();
 
-  // Renvoyez une réponse de succès
   res.status(200).send({ message: 'Cours signé avec succès' });
 });
 
