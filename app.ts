@@ -1,8 +1,8 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as basicAuth from 'express-basic-auth';
-import * as low from 'lowdb';
-import * as FileSync from 'lowdb/adapters/FileSync';
+import express from 'express';
+import bodyParser from 'body-parser';
+import basicAuth from 'express-basic-auth';
+import low, { LowdbSync } from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
 import * as yup from 'yup';
 
 interface User {
