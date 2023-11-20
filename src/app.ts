@@ -5,33 +5,8 @@ import low, { LowdbSync } from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 import * as yup from 'yup';
 
-interface User {
-  id?: number;
-  email: string;
-  password: string;
-  role: 'STUDENT' | 'ADMIN';
-}
-
-interface Course {
-  id?: number;
-  title: string;
-  date: string;
-  heure: string;
-}
-
-interface StudentCourse {
-  id?: number;
-  studentId: number;
-  courseId: number;
-  registeredAt: string | null;
-  signedAt: string | null; 
-}
-
-interface DBSchema {
-  users: User[];
-  courses: Course[];
-  studentCourses: StudentCourse[];
-}
+import { User, Course, StudentCourse, DBSchema } from './utils/_interface.ts';
+import { userSchema, courseSchema, studentCourseSchema } from './utils/_schema';
 
 const adapter = new FileSync<DBSchema>('db.json');
 const db = low(adapter);
@@ -44,6 +19,15 @@ const basicAuthUsers = users.reduce((acc: { [key: string]: string }, user: User)
   acc[user.email] = user.password;
   return acc;
 }, {});
+
+function checkRole(role: string) {
+  return (req: any, res: any, next: any) => {
+    if (req.user.role !== role) {
+      return res.status(403).send({ message: 'Accès refusé' });
+    }
+    next();
+  };
+}
 
 app.use(basicAuth({
   users: basicAuthUsers,
@@ -58,34 +42,6 @@ app.use((req: any, res, next) => {
   }
   next();
 });
-
-const userSchema = yup.object().shape({
-  email: yup.string().email().required().defined(),
-  password: yup.string().required().defined(),
-  role: yup.string().oneOf(['STUDENT', 'ADMIN']).required().defined(),
-}).noUnknown().strict().required().defined();
-
-const courseSchema = yup.object().shape({
-  title: yup.string().required().defined(),
-  date: yup.string().matches(/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/, 'La date doit être au format jj/mm/AAAA').required().defined(),
-  heure: yup.string().matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'L\'heure doit être au format HH:MM en 24 heures').required().defined(),
-}).noUnknown().strict().required().defined();
-
-const studentCourseSchema = yup.object().shape({
-  studentId: yup.number().required().defined(),
-  courseId: yup.number().required().defined(),
-  registeredAt: yup.string().matches(/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/, 'La date et l\'heure doivent être au format jj/mm/AAAA HH:MM').defined(),
-  signedAt: yup.string().matches(/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/, 'La date et l\'heure doivent être au format jj/mm/AAAA HH:MM').nullable().default(null),
-}).noUnknown().strict().required().defined();
-
-function checkRole(role: string) {
-  return (req: any, res: any, next: any) => {
-    if (req.user.role !== role) {
-      return res.status(403).send({ message: 'Accès refusé' });
-    }
-    next();
-  };
-}
 
 app.get('/', (req, res) => {
   res.status(200).send({ message: 'Vous êtes connecté!' });

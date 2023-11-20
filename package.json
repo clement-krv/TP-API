@@ -4,9 +4,9 @@
   "description": "Ceci est un test",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.ts",
-    "start": "node app.js",
-    "build": "tsc app.ts"
+    "dev": "nodemon src/app.ts",
+    "start": "node src/app.js",
+    "build": "tsc src/app.ts"
   },
   "author": "",
   "license": "ISC",
