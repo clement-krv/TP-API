@@ -5,11 +5,13 @@ import low, { LowdbSync } from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 import * as yup from 'yup';
 
-import { User, Course, StudentCourse, DBSchema } from './utils/_interface.ts';
+import { User, Course, StudentCourse, DBSchema } from './utils/_interface';
 import { userSchema, courseSchema, studentCourseSchema } from './utils/_schema';
 
 const adapter = new FileSync<DBSchema>('db.json');
 const db = low(adapter);
+
+const router = express.Router();
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,13 +31,13 @@ function checkRole(role: string) {
   };
 }
 
-app.use(basicAuth({
+router.use(basicAuth({
   users: basicAuthUsers,
   challenge: true,
   unauthorizedResponse: 'Nom d\'utilisateur ou mot de passe incorrect',
 }));
 
-app.use((req: any, res, next) => {
+router.use((req: any, res, next) => {
   const authenticatedUser = users.find(user => user.email === req.auth.user);
   if (authenticatedUser) {
     req.user = authenticatedUser;
@@ -43,11 +45,11 @@ app.use((req: any, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.status(200).send({ message: 'Vous êtes connecté!' });
 });
 
-app.post('/add-users', checkRole('ADMIN'), async (req, res) => {
+router.post('/add-users', checkRole('ADMIN'), async (req, res) => {
   let newUser: User;
 
   try {
@@ -72,14 +74,14 @@ app.post('/add-users', checkRole('ADMIN'), async (req, res) => {
   db.get('users').push(newUser).write();
 
   res.status(201).send({ message: 'Utilisateur ajouté avec succès' });
+
+  app.get('/courses', (req, res) => {
+    const courses = db.get('courses').value();
+    res.status(200).send(courses);
+  });
 });
 
-app.get('/courses', (req, res) => {
-  const courses = db.get('courses').value();
-  res.status(200).send(courses);
-});
-
-app.post('/add-courses', checkRole('ADMIN'), (req, res) => {
+router.post('/add-courses', checkRole('ADMIN'), (req, res) => {
   let newCourse: Course;
 
   try {
@@ -99,9 +101,9 @@ app.post('/add-courses', checkRole('ADMIN'), (req, res) => {
   db.get('courses').push(newCourse).write();
 
   res.status(201).send({ message: 'Cours ajouté avec succès' });
-});
+  });
 
-app.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
+router.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
   let newStudentCourse: StudentCourse = {
     ...req.body,
     registeredAt: new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -146,7 +148,7 @@ app.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
   res.status(201).send({ message: 'Inscription de l\'étudiant au cours ajoutée avec succès' });
 });
 
-app.patch('/sign-course', checkRole('STUDENT'), (req, res) => {
+router.patch('/sign-course', checkRole('STUDENT'), (req, res) => {
   const { studentId, courseId } = req.body;
 
   const user = (req as any).user;
@@ -169,6 +171,8 @@ app.patch('/sign-course', checkRole('STUDENT'), (req, res) => {
 
   res.status(200).send({ message: 'Cours signé avec succès' });
 });
+
+app.use('/api', router);
 
 app.listen(3000, () => {
   console.log('Server is listening on port 3000');
