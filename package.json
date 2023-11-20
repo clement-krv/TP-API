@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/app.ts",
     "start": "node src/app.js",
-    "build": "tsc src/app.ts"
+    "build": "tsc src/app.ts",
+    "build:css": "tailwindcss build public/assets/style.css -o public/assets/style.css"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +24,7 @@
     "@types/express": "^4.17.18",
     "@types/lowdb": "^1.0.12",
     "nodemon": "^3.0.1",
+    "tailwindcss": "^3.3.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }
