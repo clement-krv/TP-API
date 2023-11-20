@@ -11,7 +11,8 @@ import { userSchema, courseSchema, studentCourseSchema } from './utils/_schema';
 const adapter = new FileSync<DBSchema>('db.json');
 const db = low(adapter);
 
-const router = express.Router();
+const apiRouter = express.Router();
+const userRouter = express.Router();
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,13 +32,13 @@ function checkRole(role: string) {
   };
 }
 
-router.use(basicAuth({
+apiRouter.use(basicAuth({
   users: basicAuthUsers,
   challenge: true,
   unauthorizedResponse: 'Nom d\'utilisateur ou mot de passe incorrect',
 }));
 
-router.use((req: any, res, next) => {
+apiRouter.use((req: any, res, next) => {
   const authenticatedUser = users.find(user => user.email === req.auth.user);
   if (authenticatedUser) {
     req.user = authenticatedUser;
@@ -45,11 +46,11 @@ router.use((req: any, res, next) => {
   next();
 });
 
-router.get('/', (req, res) => {
+apiRouter.get('/', (req, res) => {
   res.status(200).send({ message: 'Vous êtes connecté!' });
 });
 
-router.post('/add-users', checkRole('ADMIN'), async (req, res) => {
+apiRouter.post('/add-users', checkRole('ADMIN'), async (req, res) => {
   let newUser: User;
 
   try {
@@ -81,7 +82,7 @@ router.post('/add-users', checkRole('ADMIN'), async (req, res) => {
   });
 });
 
-router.post('/add-courses', checkRole('ADMIN'), (req, res) => {
+apiRouter.post('/add-courses', checkRole('ADMIN'), (req, res) => {
   let newCourse: Course;
 
   try {
@@ -103,7 +104,7 @@ router.post('/add-courses', checkRole('ADMIN'), (req, res) => {
   res.status(201).send({ message: 'Cours ajouté avec succès' });
   });
 
-router.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
+apiRouter.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
   let newStudentCourse: StudentCourse = {
     ...req.body,
     registeredAt: new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -148,7 +149,7 @@ router.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
   res.status(201).send({ message: 'Inscription de l\'étudiant au cours ajoutée avec succès' });
 });
 
-router.patch('/sign-course', checkRole('STUDENT'), (req, res) => {
+apiRouter.patch('/sign-course', checkRole('STUDENT'), (req, res) => {
   const { studentId, courseId } = req.body;
 
   const user = (req as any).user;
@@ -172,7 +173,23 @@ router.patch('/sign-course', checkRole('STUDENT'), (req, res) => {
   res.status(200).send({ message: 'Cours signé avec succès' });
 });
 
-app.use('/api', router);
+userRouter.post('/login', (req, res) => {
+  const { email, password } = req.body;
+
+  const user = db.get('users').find({ email }).value();
+  
+
+  if (!user || user.password !== password) {
+    return res.status(401).send({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
+  }
+  res.redirect('/pages/home.html');
+});
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
+
+app.use('/api', apiRouter);
+app.use('/', userRouter, express.static('public'));
 
 app.listen(3000, () => {
   console.log('Server is listening on port 3000');
