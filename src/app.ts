@@ -187,7 +187,7 @@ userRouter.post('/login', (req, res) => {
   }
 
   if (user.role === 'ADMIN') {
-    res.redirect('/admin');
+    res.render('admin');
   } else if (user.role === 'STUDENT') {
     const studentCourses = db.get('studentCourses').filter({ studentId: user.id }).value();
     const studentCourse = db.get('studentCourses').find({ studentId: user.id }).value();

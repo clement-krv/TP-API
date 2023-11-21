@@ -1,0 +1,241 @@
+<%- include('partials/_header', { title: "TP API | Admin" }) %>
+    <div class="w-full flex">
+        <div id="sidebar" class="w-1/6">
+            <div class="flex h-screen flex-col justify-between border-e bg-white">
+                <div class="px-4 py-6">
+
+                    <ul class="mt-6 space-y-1">
+                        <li>
+                            <a href="" class="block rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                                Acceuil
+                            </a>
+                        </li>
+
+                        <li>
+                            <details class="group [&_summary::-webkit-details-marker]:hidden">
+                                <summary
+                                    class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                                    <span class="text-sm font-medium"> Utilisateurs </span>
+
+                                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </summary>
+
+                                <ul class="mt-2 space-y-1 px-4">
+                                    <li>
+                                        <a id="linkallUser" href="#"
+                                            class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                                            Tous
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a id="linkaddUser" href="#"
+                                            class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                                            Ajouter
+                                        </a>
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+
+                        <li>
+                            <details class="group [&_summary::-webkit-details-marker]:hidden">
+                                <summary
+                                    class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                                    <span class="text-sm font-medium"> Cours </span>
+
+                                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </summary>
+
+                                <ul class="mt-2 space-y-1 px-4">
+                                    <li>
+                                        <a id="linkallCourses" href=""
+                                            class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                                            Tous
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a id="linkaddCourses" href=""
+                                            class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                                            Ajouter
+                                        </a>
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+
+                        <li>
+                            <details class="group [&_summary::-webkit-details-marker]:hidden">
+                                <summary
+                                    class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                                    <span class="text-sm font-medium"> Signatures </span>
+
+                                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </summary>
+
+                                <ul class="mt-2 space-y-1 px-4">
+                                    <li>
+                                        <a id="linkallStudentCourses" href=""
+                                            class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                                            Tous
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a id="linkaddStudentCourses" href=""
+                                            class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                                            Ajouter
+                                        </a>
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <main class="w-5/6">
+
+            <div id="main" class="block">
+                Main
+            </div>
+
+            <div id="allUser" class="hidden">
+                Tout les user
+            </div>
+            <div id="addUser" class="hidden">
+                ajouter utilisateur
+            </div>
+            <div id="allCourses" class="hidden">
+                Tout les cours
+            </div>
+            <div id="addCourses" class="hidden">
+                Ajouter cours
+            </div>
+            <div id="allStudentCourses" class="hidden">
+                Toute les signatures
+            </div>
+            <div id="addStudentCourses" class="hidden">
+                ajouter signature
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+
+        var mainDiv = document.getElementById('main');
+        var allUserDiv = document.getElementById('allUser');
+        var addUserDiv = document.getElementById('addUser');
+        var allCoursesDiv = document.getElementById('allCourses');
+        var addCoursesDiv = document.getElementById('addCourses');
+        var allStudentCoursesDiv = document.getElementById('allStudentCourses');
+        var addStudentCoursesDiv = document.getElementById('addStudentCourses');
+
+        function hideAllDivs() {
+            mainDiv.classList.add('hidden');
+            allUserDiv.classList.add('hidden');
+            addUserDiv.classList.add('hidden');
+            allCoursesDiv.classList.add('hidden');
+            addCoursesDiv.classList.add('hidden');
+            allStudentCoursesDiv.classList.add('hidden');
+            addStudentCoursesDiv.classList.add('hidden');
+        }
+
+        function showMainDiv() {
+            hideAllDivs();
+            mainDiv.classList.remove('hidden');
+        }
+
+        function showAllUserDiv() {
+            hideAllDivs();
+            allUserDiv.classList.remove('hidden');
+        }
+
+        function showAddUserDiv() {
+            hideAllDivs();
+            addUserDiv.classList.remove('hidden');
+        }
+
+        function showAllCoursesDiv() {
+            hideAllDivs();
+            allCoursesDiv.classList.remove('hidden');
+        }
+
+        function showAddCoursesDiv() {
+            hideAllDivs();
+            addCoursesDiv.classList.remove('hidden');
+        }
+
+        function showAllStudentCoursesDiv() {
+            hideAllDivs();
+            allStudentCoursesDiv.classList.remove('hidden');
+        }
+
+        function showAddStudentCoursesDiv() {
+            hideAllDivs();
+            addStudentCoursesDiv.classList.remove('hidden');
+        }
+
+        document.getElementById('main').addEventListener('click', function (event) {
+            event.preventDefault();
+            showMainDiv();
+        });
+
+        document.getElementById('linkallUser').addEventListener('click', function (event) {
+            event.preventDefault();
+            showAllUserDiv();
+        });
+
+        document.getElementById('linkaddUser').addEventListener('click', function (event) {
+            event.preventDefault();
+            showAddUserDiv();
+        });
+
+        document.getElementById('linkallCourses').addEventListener('click', function (event) {
+            event.preventDefault();
+            showAllCoursesDiv();
+        });
+
+        document.getElementById('linkaddCourses').addEventListener('click', function (event) {
+            event.preventDefault();
+            showAddCoursesDiv();
+        });
+
+        document.getElementById('linkallStudentCourses').addEventListener('click', function (event) {
+            event.preventDefault();
+            showAllStudentCoursesDiv();
+        });
+
+        document.getElementById('linkaddStudentCourses').addEventListener('click', function (event) {
+            event.preventDefault();
+            showAddStudentCoursesDiv();
+        });
+
+        window.onload = showMainDiv;
+
+
+    </script>
