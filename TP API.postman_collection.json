@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "63f39d52-e414-4eb7-bb20-0ca394e1ea72",
 		"name": "TP API",
+		"description": "TP API durant le cours de dev web & API au sein de l'ESGI",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30082043"
 	},
@@ -27,13 +28,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/courses",
+					"raw": "http://localhost:3000/api/courses",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
+						"api",
 						"courses"
 					]
 				}
@@ -70,13 +72,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/add-users",
+					"raw": "http://localhost:3000/api/add-users",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
+						"api",
 						"add-users"
 					]
 				}
@@ -113,13 +116,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/add-courses",
+					"raw": "http://localhost:3000/api/add-courses",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
+						"api",
 						"add-courses"
 					]
 				}
@@ -148,7 +152,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"studentId\": 3,\r\n    \"courseId\": 2\r\n}",
+					"raw": "{\r\n    \"studentId\": 2,\r\n    \"courseId\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -156,13 +160,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/add-studentcourse",
+					"raw": "http://localhost:3000/api/add-studentcourse",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
+						"api",
 						"add-studentcourse"
 					]
 				}
@@ -191,7 +196,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"studentId\": 3,\r\n    \"courseId\": 2\r\n}",
+					"raw": "{\r\n    \"studentId\": 2,\r\n    \"courseId\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -199,13 +204,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/sign-course",
+					"raw": "http://localhost:3000/api/sign-course",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
+						"api",
 						"sign-course"
 					]
 				}
