@@ -173,7 +173,7 @@
                             <div class="relative">
                                 <input type="email" name="email"
                                     class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                                    placeholder="Enter email" />
+                                    placeholder="email" />
 
                             </div>
                         </div>
@@ -184,7 +184,7 @@
                             <div class="relative">
                                 <input type="password" name="password"
                                     class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                                    placeholder="Enter password" />
+                                    placeholder="mot de passe" />
 
                             </div>
                         </div>
@@ -252,17 +252,53 @@
                 </div>
             </div>
             <div id="addCourses" class="hidden">
-                <form action="/addCourse" method="post">
-                    <label for="title">Nom du cours :</label>
-                    <input type="text" id="title" name="title" required>
-                    <label for="date">Date du cours :</label>
-                    <input type="date" id="date" name="date" required>
+                <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+                    <div class="mx-auto max-w-lg text-center">
+                        <h1 class="text-2xl font-bold sm:text-3xl">Ajouter un cours</h1>
+                    </div>
 
-                    <label for="heure">Heure du cours :</label>
-                    <input type="time" id="heure" name="heure" required>
+                    <form method="post" action="/addCourse" class="mx-auto mb-0 mt-8 max-w-md space-y-4">
+                        <div>
+                            <label for="title" class="sr-only">nom du cours</label>
 
-                    <input type="submit" value="Ajouter un cours">
-                </form>
+                            <div class="relative">
+                                <input type="title" name="title"
+                                    class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                                    placeholder="titre" />
+
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="date" class="sr-only">date du cours</label>
+
+                            <div class="relative">
+                                <input type="date" name="date"
+                                    class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" />
+
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="heure" class="sr-only">heure du cours</label>
+
+                            <div class="relative">
+                                <input type="time" name="heure"
+                                    class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" />
+                            </div>
+                        </div>
+
+
+                        <div class="flex items-center">
+
+                            <button type="submit"
+                                class="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white">
+                                Ajouter un cours
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             </div>
             <div id="allStudentCourses" class="hidden">
                 Toute les signatures

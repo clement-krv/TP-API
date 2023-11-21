@@ -107,7 +107,7 @@ apiRouter.post('/add-courses', checkRole('ADMIN'), (req, res) => {
   db.get('courses').push(newCourse).write();
 
   res.status(201).send({ message: 'Cours ajouté avec succès' });
-  });
+});
 
 apiRouter.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
   let newStudentCourse: StudentCourse = {
@@ -232,19 +232,19 @@ userRouter.post('/addUser', (req, res) => {
   let newUser: User;
 
   try {
-      newUser = userSchema.validateSync(req.body);
+    newUser = userSchema.validateSync(req.body);
   } catch (error) {
-      if (error instanceof yup.ValidationError) {
-          return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
-      }
-      return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
+    if (error instanceof yup.ValidationError) {
+      return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
+    }
+    return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
   newUser = userSchema.cast(newUser);
 
   const existingUser = db.get('users').find({ email: newUser.email }).value();
   if (existingUser) {
-      return res.status(409).send({ message: 'Un utilisateur avec cet email existe déjà' });
+    return res.status(409).send({ message: 'Un utilisateur avec cet email existe déjà' });
   }
 
   const newId = db.get('users').size().value() + 1;
@@ -257,30 +257,24 @@ userRouter.post('/addUser', (req, res) => {
 
 userRouter.post('/addCourse', (req, res) => {
   let newCourse = req.body;
-
-  console.log(newCourse);
-
-  // Formater la date au format jj/mm/aaaa
-  const formattedDate = format(new Date(newCourse.date), 'dd/MM/yyyy');
-    newCourse.date = formattedDate;
-
-  console.log(newCourse);
   
+  const formattedDate = format(new Date(newCourse.date), 'dd/MM/yyyy');
+  newCourse.date = formattedDate;
 
   try {
-      newCourse = courseSchema.validateSync(newCourse);
+    newCourse = courseSchema.validateSync(newCourse);
   } catch (error) {
-      if (error instanceof yup.ValidationError) {
-          return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
-      }
-      return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
+    if (error instanceof yup.ValidationError) {
+      return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
+    }
+    return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
   newCourse = courseSchema.cast(newCourse);
 
   const existingCourse = db.get('courses').find({ title: newCourse.title }).value();
   if (existingCourse) {
-      return res.status(409).send({ message: 'Un cours avec ce titre existe déjà' });
+    return res.status(409).send({ message: 'Un cours avec ce titre existe déjà' });
   }
 
   const newId = db.get('courses').size().value() + 1;
@@ -292,7 +286,7 @@ userRouter.post('/addCourse', (req, res) => {
 });
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', apiRouter);
 app.use('/', userRouter);
