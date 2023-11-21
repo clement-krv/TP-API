@@ -125,6 +125,10 @@
             </div>
 
             <div id="allUser" class="hidden">
+
+                <div class="mx-auto max-w-lg text-center py-16">
+                    <h1 class="text-2xl font-bold sm:text-3xl">Tout les utilisateurs</h1>
+                </div>
                 <div class="overflow-x-auto flex justify-center mt-5">
                     <table class="min-w-fit divide-y-2 divide-gray-200 bg-white text-sm">
                         <thead class="ltr:text-left rtl:text-right">
@@ -185,8 +189,8 @@
                             </div>
                         </div>
 
-                        <label for="role"
-                            class="block mb-2 text-sm font-medium text-gray-900">Choisissez un role</label>
+                        <label for="role" class="block mb-2 text-sm font-medium text-gray-900">Choisissez un
+                            role</label>
                         <select id="role" name="role"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                             <option value="STUDENT">Etudiant</option>
@@ -205,7 +209,47 @@
                 </div>
             </div>
             <div id="allCourses" class="hidden">
-                Tout les cours
+                <div class="mx-auto max-w-lg text-center py-16">
+                    <h1 class="text-2xl font-bold sm:text-3xl">Tout les cours</h1>
+                </div>
+                <div class="overflow-x-auto flex justify-center mt-5">
+                    <table class="min-w-fit divide-y-2 divide-gray-200 bg-white text-sm">
+                        <thead class="ltr:text-left rtl:text-right">
+                            <tr>
+                                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                                    Titre
+                                </th>
+                                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                                    Date
+                                </th>
+                                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                                    Heure
+                                </th>
+                                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                                    Action
+                                </th>
+                                <th class="px-4 py-2"></th>
+                            </tr>
+                        </thead>
+                        <% courses.forEach(function(course) { %>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center">
+                                        <%= course.title %>
+                                    </td>
+                                    <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
+                                        <%= new Date(course.date).toLocaleString('fr-FR', { day: 'numeric' ,
+                                            month: 'long' , year: 'numeric' }) %>
+                                    </td>
+                                    <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
+                                        <%= course.heure %>
+                                    </td>
+
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                    </table>
+                </div>
             </div>
             <div id="addCourses" class="hidden">
                 Ajouter cours
