@@ -5,41 +5,10 @@
       "email": "admin@admin.fr",
       "password": "admin",
       "role": "ADMIN"
-    },
-    {
-      "email": "student@student.fr",
-      "password": "student",
-      "role": "STUDENT",
-      "id": 2
-    },
-    {
-      "email": "test@student.fr",
-      "password": "student",
-      "role": "STUDENT",
-      "id": 3
     }
   ],
   "courses": [
-    {
-      "title": "test",
-      "date": "01-01-2001",
-      "heure": "18:00",
-      "id": 1
-    },
-    {
-      "title": "Angular",
-      "date": "01-01-2001",
-      "heure": "18:00",
-      "id": 2
-    }
   ],
   "studentCourses": [
-    {
-      "signedAt": null,
-      "registeredAt": "17/11/2023 16:49",
-      "courseId": 2,
-      "studentId": 3,
-      "id": 1
-    }
   ]
 }

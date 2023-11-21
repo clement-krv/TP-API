@@ -267,7 +267,7 @@ userRouter.post('/addUser', (req, res) => {
 userRouter.post('/addCourse', (req, res) => {
   let newCourse = req.body;
   
-  const formattedDate = format(new Date(newCourse.date), 'dd/MM/yyyy');
+  const formattedDate = format(new Date(newCourse.date), 'dd-MM-yyyy');
   newCourse.date = formattedDate;
 
   try {
@@ -291,7 +291,34 @@ userRouter.post('/addCourse', (req, res) => {
 
   db.get('courses').push(newCourse).write();
 
-  res.status(201).send({ message: 'Cours ajouté avec succès', course: newCourse });
+  res.status(201).send({ message: 'Cours ajouté avec succès'});
+});
+
+userRouter.post('/addStudentCourse', (req, res) => {
+  const studentEmail = req.body.studentEmail;
+  const courseTitle = req.body.courseTitle;
+
+  // Trouver l'étudiant et le cours correspondants
+  const student = db.get('users').find({ email: studentEmail, role: 'STUDENT' }).value();
+  const course = db.get('courses').find({ title: courseTitle }).value();
+
+  if (!student || !course || student.id === undefined || course.id === undefined) {
+    res.status(400).send('Étudiant ou cours non trouvé');
+    return;
+  }
+  
+  // Créer une nouvelle entrée dans studentCourses
+  const newStudentCourse = {
+    id: db.get('studentCourses').size().value() + 1,
+    studentId: student.id,
+    courseId: course.id,
+    registeredAt: format(new Date(), 'dd-MM-yyyy HH:mm'),
+    signedAt: null
+  };
+  
+  db.get('studentCourses').push(newStudentCourse).write();
+  
+  res.status(201).send({ message: 'Signature ajoutée avec succès' });
 });
 
 app.use(express.json());

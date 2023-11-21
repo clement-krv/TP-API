@@ -300,34 +300,70 @@
                 </div>
             </div>
             <div id="allStudentCourses" class="hidden">
+                <div class="flex flex-wrap">
                 <% formattedStudentCourses.forEach(function(sc) { %>
-
                     <div class="block max-w-sm my-4 mx-4 p-6 bg-white border border-gray-200 rounded-lg shadow">
 
                         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Signature</h5>
-                        <p class="font-semibold text-gray-800">Email de l'étudiant : <span class="font-normal text-gray-500"><%= sc.studentEmail %></span>
+                        <p class="font-semibold text-gray-800">Email de l'étudiant : <span
+                                class="font-normal text-gray-500">
+                                <%= sc.studentEmail %>
+                            </span>
                         </p>
-                        <p class="font-semibold text-gray-800">Titre du cours : <span class="font-normal text-gray-500"><%= sc.courseTitle %></span>
+                        <p class="font-semibold text-gray-800">Titre du cours : <span class="font-normal text-gray-500">
+                                <%= sc.courseTitle %>
+                            </span>
                         </p>
-                        <p class="font-semibold text-gray-800">Date du cours : <span class="font-normal text-gray-500"><%= sc.courseDate %></span>
+                        <p class="font-semibold text-gray-800">Date du cours : <span class="font-normal text-gray-500">
+                                <%= sc.courseDate %>
+                            </span>
                         </p>
-                        <p class="font-semibold text-gray-800">Heure du cours : <span class="font-normal text-gray-500"><%= sc.courseTime %></span>
+                        <p class="font-semibold text-gray-800">Heure du cours : <span class="font-normal text-gray-500">
+                                <%= sc.courseTime %>
+                            </span>
                         </p>
-                        <p class="font-semibold text-gray-800">Inscrit le : <span class="font-normal text-gray-500"><%= sc.registeredAt %></span>
+                        <p class="font-semibold text-gray-800">Inscrit le : <span class="font-normal text-gray-500">
+                                <%= sc.registeredAt %>
+                            </span>
                         </p>
                         <p class="font-semibold text-green-700">
                             <% if (sc.signedAt) { %>
-                                Signé le : <span class="font-normal text-gray-500"><%= sc.signedAt %></span>
-                                    <% } else { %>
-                                        <span class="font-semibold text-red-700">Pas signé</span>
-                                        <% } %>
+                                Signé le : <span class="font-normal text-gray-500">
+                                    <%= sc.signedAt %>
+                                </span>
+                                <% } else { %>
+                                    <span class="font-semibold text-red-700">Pas signé</span>
+                                    <% } %>
                         </p>
                     </div>
                     <% }); %>
+                </div>
 
             </div>
             <div id="addStudentCourses" class="hidden">
-                ajouter signature
+                <form action="/addStudentCourse" method="post">
+                    <label for="studentEmail">Email de l'étudiant :</label>
+                    <select name="studentEmail" id="studentEmail">
+                        <% users.forEach(function(user) { %>
+                            <% if (user.role==='STUDENT' ) { %>
+                                <option value="<%= user.email %>">
+                                    <%= user.email %>
+                                </option>
+                                <% } %>
+                                    <% }); %>
+                    </select>
+
+                    <label for="courseTitle">Nom du cours :</label>
+                    <select name="courseTitle" id="courseTitle">
+                        <% courses.forEach(function(course) { %>
+                            <option value="<%= course.title %>">
+                                <%= course.title %>
+                            </option>
+                            <% }); %>
+                    </select>
+
+                    <input type="submit" value="Ajouter">
+                </form>
             </div>
 
         </main>
