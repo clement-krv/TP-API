@@ -5,6 +5,9 @@
     <h2 class="text-3xl font-bold sm:text-4xl text-center mt-5">
         Vos cours : 
     </h2>
+    <p class="text-sm text-center text-gray-500">
+        Connecté avec cette adresse mail : <%= user.email %>
+    </p>
 
 </div>
     <div class="overflow-x-auto flex justify-center mt-5">
@@ -33,8 +36,7 @@
                             <%= course.title %>
                         </td>
                         <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
-                            <%= new Date(course.date).toLocaleString('fr-FR', { day: 'numeric' , month: 'long' ,
-                                year: 'numeric' }) %>
+                            <%= course.date %>
                         </td>
                         <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
                             <%= course.heure %>

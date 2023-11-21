@@ -55,6 +55,11 @@ apiRouter.get('/', (req, res) => {
   res.status(200).send({ message: 'Vous êtes connecté!' });
 });
 
+apiRouter.get('/courses', (req, res) => {
+  const courses = db.get('courses').value();
+  res.status(200).send(courses);
+});
+
 apiRouter.post('/add-users', checkRole('ADMIN'), async (req, res) => {
   let newUser: User;
 
