@@ -36,7 +36,7 @@ Je n'est pas réussi a faire en sorte d'ajouter des message flash pour les erreu
 
 ## Champs manquant 
 
-Dans le dashboard de l'admin il est possible que vous voyez un champ "Action" avec rien en dessous, c'est normal c'est pour motrer une possibilité de *CRUD*.
+Dans le dashboard de l'admin il est possible que vous voyez un champ "Action" avec rien en dessous, c'est normal c'est pour motrer une possibilitée de *CRUD*.
 
 ## API
 
