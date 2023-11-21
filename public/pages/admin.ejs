@@ -238,8 +238,7 @@
                                         <%= course.title %>
                                     </td>
                                     <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
-                                        <%= new Date(course.date).toLocaleString('fr-FR', { day: 'numeric' ,
-                                            month: 'long' , year: 'numeric' }) %>
+                                        <%= course.date %>
                                     </td>
                                     <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
                                         <%= course.heure %>
@@ -300,6 +299,9 @@
                 </div>
             </div>
             <div id="allStudentCourses" class="hidden">
+                <div class="mx-auto max-w-lg text-center">
+                    <h1 class="text-2xl font-bold sm:text-3xl">Information des signatures</h1>
+                </div>
                 <div class="flex flex-wrap">
                 <% formattedStudentCourses.forEach(function(sc) { %>
                     <div class="block max-w-sm my-4 mx-4 p-6 bg-white border border-gray-200 rounded-lg shadow">
@@ -341,6 +343,9 @@
 
             </div>
             <div id="addStudentCourses" class="hidden">
+                <div class="mx-auto max-w-lg text-center">
+                    <h1 class="text-2xl font-bold sm:text-3xl">Ajouter un etudiant à un cours</h1>
+                </div>
                 <form action="/addStudentCourse" method="post">
                     <label for="studentEmail">Email de l'étudiant :</label>
                     <select name="studentEmail" id="studentEmail">

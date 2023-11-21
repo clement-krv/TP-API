@@ -5,10 +5,29 @@
       "email": "admin@admin.fr",
       "password": "admin",
       "role": "ADMIN"
+    },
+    {
+      "email": "student@student.fr",
+      "password": "student",
+      "role": "STUDENT",
+      "id": 2
     }
   ],
   "courses": [
+    {
+      "title": "Angular",
+      "date": "17-11-2023",
+      "heure": "17:45",
+      "id": 1
+    }
   ],
   "studentCourses": [
+    {
+      "id": 1,
+      "studentId": 2,
+      "courseId": 1,
+      "registeredAt": "21-11-2023 23:32",
+      "signedAt": null
+    }
   ]
 }
