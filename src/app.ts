@@ -4,6 +4,7 @@ import basicAuth from 'express-basic-auth';
 import low, { LowdbSync } from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 import * as yup from 'yup';
+import path from 'path';
 
 import { User, Course, StudentCourse, DBSchema } from './utils/_interface';
 import { userSchema, courseSchema, studentCourseSchema } from './utils/_schema';
@@ -16,6 +17,9 @@ const userRouter = express.Router();
 
 const app = express();
 app.use(bodyParser.json());
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../public/pages'));
 
 const users = db.get('users').value();
 const basicAuthUsers = users.reduce((acc: { [key: string]: string }, user: User) => {
@@ -182,7 +186,14 @@ userRouter.post('/login', (req, res) => {
   if (!user || user.password !== password) {
     return res.status(401).send({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
   }
-  res.redirect('/home');
+  
+  if (user.role === 'ADMIN') {
+    res.redirect('/admin');
+  } else if (user.role === 'STUDENT') {
+    res.render('home');
+  } else {
+    res.status(403).send({ message: 'Accès non autorisé' });
+  }
 });
 
 app.use(express.json());
