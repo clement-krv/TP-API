@@ -1,10 +1,10 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import basicAuth from 'express-basic-auth';
-import low, { LowdbSync } from 'lowdb';
-import FileSync from 'lowdb/adapters/FileSync';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as basicAuth from 'express-basic-auth';
+import * as low from 'lowdb';
+import * as FileSync from 'lowdb/adapters/FileSync';
 import * as yup from 'yup';
-import path from 'path';
+import * as path from 'path';
 import { parse, format } from 'date-fns';
 
 import { User, Course, StudentCourse, DBSchema } from './utils/_interface';
@@ -64,7 +64,7 @@ apiRouter.post('/add-users', checkRole('ADMIN'), async (req, res) => {
   let newUser: User;
 
   try {
-    newUser = userSchema.validateSync(req.body);
+    newUser = userSchema.validateSync(req.body) as User;
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
@@ -72,7 +72,7 @@ apiRouter.post('/add-users', checkRole('ADMIN'), async (req, res) => {
     return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
-  newUser = userSchema.cast(newUser);
+  newUser = userSchema.cast(newUser) as User;
 
   const existingUser = db.get('users').find({ email: newUser.email }).value();
   if (existingUser) {
@@ -96,7 +96,7 @@ apiRouter.post('/add-courses', checkRole('ADMIN'), (req, res) => {
   let newCourse: Course;
 
   try {
-    newCourse = courseSchema.validateSync(req.body);
+    newCourse = courseSchema.validateSync(req.body) as Course;
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
@@ -104,7 +104,7 @@ apiRouter.post('/add-courses', checkRole('ADMIN'), (req, res) => {
     return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
-  newCourse = courseSchema.cast(newCourse);
+  newCourse = courseSchema.cast(newCourse) as Course;
 
   const newId = db.get('courses').size().value() + 1;
   newCourse.id = newId;
@@ -126,7 +126,7 @@ apiRouter.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
   }
 
   try {
-    newStudentCourse = studentCourseSchema.validateSync(newStudentCourse);
+    newStudentCourse = studentCourseSchema.validateSync(newStudentCourse) as StudentCourse;
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
@@ -134,7 +134,7 @@ apiRouter.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
     return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
-  newStudentCourse = studentCourseSchema.cast(newStudentCourse);
+  newStudentCourse = studentCourseSchema.cast(newStudentCourse) as StudentCourse;
 
   const existingCourse = db.get('courses').find({ id: newStudentCourse.courseId }).value();
   if (!existingCourse) {
@@ -246,7 +246,7 @@ userRouter.post('/addUser', (req, res) => {
   let newUser: User;
 
   try {
-    newUser = userSchema.validateSync(req.body);
+    newUser = userSchema.validateSync(req.body) as User;
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
@@ -254,7 +254,7 @@ userRouter.post('/addUser', (req, res) => {
     return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
-  newUser = userSchema.cast(newUser);
+  newUser = userSchema.cast(newUser) as User;
 
   const existingUser = db.get('users').find({ email: newUser.email }).value();
   if (existingUser) {
