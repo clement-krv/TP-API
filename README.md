@@ -34,6 +34,10 @@ Quand vous allez ajouter ou modifié une donné vous allez être redirigé vers 
 
 Je n'est pas réussi a faire en sorte d'ajouter des message flash pour les erreurs, donc je vous ai mis des messages en JSON,  après l'ajout d'une donnée, je n'est pas réussi a faire en sorte que la page se rafraichisse automatiquement, donc il faut le faire manuellement.
 
+## Champs manquant 
+
+Dans le dashboard de l'admin il est possible que vous voyez un champ "Action" avec rien en dessous, c'est normal c'est pour motrer une possibilité de *CRUD*.
+
 ## API
 
 Utiliser le fichier *.postman_collection.json* et mettre ça dans postman pour tester les endpoints.
