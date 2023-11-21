@@ -182,14 +182,16 @@ userRouter.post('/login', (req, res) => {
   if (!user || user.password !== password) {
     return res.status(401).send({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
   }
-  res.redirect('/pages/home.html');
+  res.redirect('/home');
 });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
 app.use('/api', apiRouter);
-app.use('/', userRouter, express.static('public'));
+app.use('/', userRouter);
+app.use('/', express.static('public', { extensions: ['html'] }));
+app.use('/', express.static('public/pages', { extensions: ['html'] }));
 
 app.listen(3000, () => {
   console.log('Server is listening on port 3000');
