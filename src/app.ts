@@ -5,6 +5,7 @@ import low, { LowdbSync } from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 import * as yup from 'yup';
 import path from 'path';
+import { parse, format } from 'date-fns';
 
 import { User, Course, StudentCourse, DBSchema } from './utils/_interface';
 import { userSchema, courseSchema, studentCourseSchema } from './utils/_schema';
@@ -80,7 +81,7 @@ apiRouter.post('/add-users', checkRole('ADMIN'), async (req, res) => {
 
   res.status(201).send({ message: 'Utilisateur ajouté avec succès' });
 
-  app.get('/courses', (req, res) => {
+  apiRouter.get('/courses', (req, res) => {
     const courses = db.get('courses').value();
     res.status(200).send(courses);
   });
@@ -252,6 +253,42 @@ userRouter.post('/addUser', (req, res) => {
   db.get('users').push(newUser).write();
 
   res.status(201).send({ message: 'Utilisateur ajouté avec succès' });
+});
+
+userRouter.post('/addCourse', (req, res) => {
+  let newCourse = req.body;
+
+  console.log(newCourse);
+
+  // Formater la date au format jj/mm/aaaa
+  const formattedDate = format(new Date(newCourse.date), 'dd/MM/yyyy');
+    newCourse.date = formattedDate;
+
+  console.log(newCourse);
+  
+
+  try {
+      newCourse = courseSchema.validateSync(newCourse);
+  } catch (error) {
+      if (error instanceof yup.ValidationError) {
+          return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
+      }
+      return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
+  }
+
+  newCourse = courseSchema.cast(newCourse);
+
+  const existingCourse = db.get('courses').find({ title: newCourse.title }).value();
+  if (existingCourse) {
+      return res.status(409).send({ message: 'Un cours avec ce titre existe déjà' });
+  }
+
+  const newId = db.get('courses').size().value() + 1;
+  (newCourse as any).id = newId;
+
+  db.get('courses').push(newCourse).write();
+
+  res.status(201).send({ message: 'Cours ajouté avec succès', course: newCourse });
 });
 
 app.use(express.json());

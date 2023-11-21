@@ -252,7 +252,17 @@
                 </div>
             </div>
             <div id="addCourses" class="hidden">
-                Ajouter cours
+                <form action="/addCourse" method="post">
+                    <label for="title">Nom du cours :</label>
+                    <input type="text" id="title" name="title" required>
+                    <label for="date">Date du cours :</label>
+                    <input type="date" id="date" name="date" required>
+
+                    <label for="heure">Heure du cours :</label>
+                    <input type="time" id="heure" name="heure" required>
+
+                    <input type="submit" value="Ajouter un cours">
+                </form>
             </div>
             <div id="allStudentCourses" class="hidden">
                 Toute les signatures
