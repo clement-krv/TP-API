@@ -346,9 +346,12 @@
                 <div class="mx-auto max-w-lg text-center">
                     <h1 class="text-2xl font-bold sm:text-3xl">Ajouter un etudiant à un cours</h1>
                 </div>
-                <form action="/addStudentCourse" method="post">
-                    <label for="studentEmail">Email de l'étudiant :</label>
-                    <select name="studentEmail" id="studentEmail">
+                <form method="post" action="/addStudentCourse" class="mx-auto mb-0 mt-8 max-w-md space-y-4">
+                    <div>
+                        <label for="studentEmail">Email de l'étudiant</label>
+
+                        <select id="studentEmail" name="studentEmail"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                         <% users.forEach(function(user) { %>
                             <% if (user.role==='STUDENT' ) { %>
                                 <option value="<%= user.email %>">
@@ -357,17 +360,28 @@
                                 <% } %>
                                     <% }); %>
                     </select>
+                    </div>
 
-                    <label for="courseTitle">Nom du cours :</label>
-                    <select name="courseTitle" id="courseTitle">
+                    <div>
+                        <label for="courseTitle">Titre du cours</label>
+
+                        <select id="courseTitle" name="courseTitle"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                         <% courses.forEach(function(course) { %>
                             <option value="<%= course.title %>">
                                 <%= course.title %>
                             </option>
                             <% }); %>
                     </select>
+                    </div>
 
-                    <input type="submit" value="Ajouter">
+                    <div class="flex items-center">
+
+                        <button type="submit"
+                            class="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white">
+                            Enregistrer
+                        </button>
+                    </div>
                 </form>
             </div>
 
