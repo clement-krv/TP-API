@@ -191,7 +191,20 @@ userRouter.post('/login', (req, res) => {
     const users = db.get('users').value();
     const courses = db.get('courses').value();
     const studentCourses = db.get('studentCourses').value();
-    res.render('admin', { users, courses, studentCourses });
+    const formattedStudentCourses = studentCourses.map(sc => {
+      const student = db.get('users').find({ id: sc.studentId, role: 'STUDENT' }).value();
+      const course = db.get('courses').find({ id: sc.courseId }).value();
+      return {
+        studentEmail: student.email,
+        courseTitle: course.title,
+        courseDate: course.date,
+        courseTime: course.heure,
+        registeredAt: sc.registeredAt,
+        signedAt: sc.signedAt
+      };
+    });
+    
+    res.render('admin', { users, courses, formattedStudentCourses });
   } else if (user.role === 'STUDENT') {
     const studentCourses = db.get('studentCourses').filter({ studentId: user.id }).value();
     const studentCourse = db.get('studentCourses').find({ studentId: user.id }).value();
@@ -207,19 +220,15 @@ userRouter.post('/login', (req, res) => {
 userRouter.post('/sign-course', (req, res) => {
   const { courseId, userId } = req.body;
 
-  // Convertir courseId et userId en nombres
   const courseIdNumber = Number(courseId);
   const userIdNumber = Number(userId);
 
-  // Trouver le cours dans la base de données
   const course = db.get('courses').find({ id: courseIdNumber }).value();
 
-  // Vérifier si le cours existe
   if (!course) {
     return res.status(404).send({ message: 'Cours non trouvé' });
   }
 
-  // Marquer le cours comme signé pour l'utilisateur
   db.get('studentCourses')
     .find({ courseId: courseIdNumber, studentId: userIdNumber })
     .assign({ signedAt: new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) })

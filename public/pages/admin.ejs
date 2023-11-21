@@ -300,7 +300,22 @@
                 </div>
             </div>
             <div id="allStudentCourses" class="hidden">
-                Toute les signatures
+                <% formattedStudentCourses.forEach(function(sc) { %>
+                    <div>
+                        <p>Email de l'étudiant : <%= sc.studentEmail %>
+                        </p>
+                        <p>Titre du cours : <%= sc.courseTitle %>
+                        </p>
+                        <p>Date du cours : <%= sc.courseDate %>
+                        </p>
+                        <p>Heure du cours : <%= sc.courseTime %>
+                        </p>
+                        <p>Inscrit le : <%= sc.registeredAt %>
+                        </p>
+                        <p>Signé le : <%= sc.signedAt ? sc.signedAt : "Pas signé" %>
+                        </p>
+                    </div>
+                    <% }); %>
             </div>
             <div id="addStudentCourses" class="hidden">
                 ajouter signature
