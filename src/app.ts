@@ -181,19 +181,46 @@ userRouter.post('/login', (req, res) => {
   const { email, password } = req.body;
 
   const user = db.get('users').find({ email }).value();
-  
 
   if (!user || user.password !== password) {
     return res.status(401).send({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
   }
-  
+
   if (user.role === 'ADMIN') {
     res.redirect('/admin');
   } else if (user.role === 'STUDENT') {
-    res.render('home');
+    const studentCourses = db.get('studentCourses').filter({ studentId: user.id }).value();
+    const courses = studentCourses.map(course => {
+      return db.get('courses').find({ id: course.courseId }).value();
+    });
+    res.render('home', { courses, user });
   } else {
     res.status(403).send({ message: 'Accès non autorisé' });
   }
+});
+
+userRouter.post('/sign-course', (req, res) => {
+  const { courseId, userId } = req.body;
+
+  // Convertir courseId et userId en nombres
+  const courseIdNumber = Number(courseId);
+  const userIdNumber = Number(userId);
+
+  // Trouver le cours dans la base de données
+  const course = db.get('courses').find({ id: courseIdNumber }).value();
+
+  // Vérifier si le cours existe
+  if (!course) {
+    return res.status(404).send({ message: 'Cours non trouvé' });
+  }
+
+  // Marquer le cours comme signé pour l'utilisateur
+  db.get('studentCourses')
+    .find({ courseId: courseIdNumber, studentId: userIdNumber })
+    .assign({ signedAt: new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) })
+    .write();
+
+  res.send({ message: 'Cours signé avec succès' });
 });
 
 app.use(express.json());

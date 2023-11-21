@@ -1,3 +1,29 @@
 <%- include('partials/_header', { title: "TP API | Acceuil"}) %>
-    Bienvenue
+    <div>
+        <% courses.forEach(function(course) { %>
+            <div>
+                <h2><%= course.title %></h2>
+                <p><%= new Date(course.date).toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) %></p>
+                <p><%= course.heure %></p>
+                <button class="btn btn-primary" onclick="signCourse('<%= course.id %>', '<%= user.id %>')">Signer le cours</button>
+            </div>
+        <% }); %>
+    </div>
 <%- include('partials/_footer') %>
+
+<script>
+    function signCourse(courseId, userId) {
+        fetch('/sign-course', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ courseId, userId }),
+        })
+        .then(response => response.json())
+        .then(data => alert(data.message))
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+</script>
