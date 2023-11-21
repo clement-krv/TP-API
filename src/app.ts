@@ -190,10 +190,11 @@ userRouter.post('/login', (req, res) => {
     res.redirect('/admin');
   } else if (user.role === 'STUDENT') {
     const studentCourses = db.get('studentCourses').filter({ studentId: user.id }).value();
+    const studentCourse = db.get('studentCourses').find({ studentId: user.id }).value();
     const courses = studentCourses.map(course => {
       return db.get('courses').find({ id: course.courseId }).value();
     });
-    res.render('home', { courses, user });
+    res.render('home', { courses, user, studentCourse });
   } else {
     res.status(403).send({ message: 'Accès non autorisé' });
   }

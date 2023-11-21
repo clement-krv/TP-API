@@ -1,29 +1,76 @@
-<%- include('partials/_header', { title: "TP API | Acceuil"}) %>
-    <div>
-        <% courses.forEach(function(course) { %>
-            <div>
-                <h2><%= course.title %></h2>
-                <p><%= new Date(course.date).toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) %></p>
-                <p><%= course.heure %></p>
-                <button class="btn btn-primary" onclick="signCourse('<%= course.id %>', '<%= user.id %>')">Signer le cours</button>
-            </div>
-        <% }); %>
-    </div>
-<%- include('partials/_footer') %>
+<%- include('partials/_header', { title: "TP API | Acceuil" }) %>
 
-<script>
-    function signCourse(courseId, userId) {
-        fetch('/sign-course', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ courseId, userId }),
-        })
-        .then(response => response.json())
-        .then(data => alert(data.message))
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-    }
-</script>
+<div class="my-5">
+
+    <h2 class="text-3xl font-bold sm:text-4xl text-center mt-5">
+        Vos cours : 
+    </h2>
+
+</div>
+    <div class="overflow-x-auto flex justify-center mt-5">
+        <table class="min-w-fit divide-y-2 divide-gray-200 bg-white text-sm">
+            <thead class="ltr:text-left rtl:text-right">
+                <tr>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                        Titre
+                    </th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                        Date
+                    </th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                        Heure
+                    </th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                        Action
+                    </th>
+                    <th class="px-4 py-2"></th>
+                </tr>
+            </thead>
+            <% courses.forEach(function(course) { %>
+                <tbody class="divide-y divide-gray-200">
+                    <tr>
+                        <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center">
+                            <%= course.title %>
+                        </td>
+                        <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
+                            <%= new Date(course.date).toLocaleString('fr-FR', { day: 'numeric' , month: 'long' ,
+                                year: 'numeric' }) %>
+                        </td>
+                        <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
+                            <%= course.heure %>
+                        </td>
+                        <td class="whitespace-nowrap px-4 py-2 flex justify-center">
+                            <% if (studentCourse.signedAt) { %>
+                                <button disabled class="inline-block rounded bg-gray-400 px-4 py-2 text-xs font-medium text-white">
+                                    Signé
+                                </button>
+                            <% } else { %>
+                                <button onclick="signCourse('<%= studentCourse.courseId %>', '<%= user.id %>')"
+                                    class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700">
+                                    Signer
+                                </button>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+        </table>
+    </div>
+    <%- include('partials/_footer') %>
+
+        <script>
+            function signCourse(courseId, userId) {
+                fetch('/sign-course', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ courseId, userId }),
+                })
+                    .then(response => response.json())
+                    .then(data => alert(data.message))
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
+        </script>
