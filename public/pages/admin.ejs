@@ -301,21 +301,30 @@
             </div>
             <div id="allStudentCourses" class="hidden">
                 <% formattedStudentCourses.forEach(function(sc) { %>
-                    <div>
-                        <p>Email de l'étudiant : <%= sc.studentEmail %>
+
+                    <div class="block max-w-sm my-4 mx-4 p-6 bg-white border border-gray-200 rounded-lg shadow">
+
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Signature</h5>
+                        <p class="font-semibold text-gray-800">Email de l'étudiant : <span class="font-normal text-gray-500"><%= sc.studentEmail %></span>
                         </p>
-                        <p>Titre du cours : <%= sc.courseTitle %>
+                        <p class="font-semibold text-gray-800">Titre du cours : <span class="font-normal text-gray-500"><%= sc.courseTitle %></span>
                         </p>
-                        <p>Date du cours : <%= sc.courseDate %>
+                        <p class="font-semibold text-gray-800">Date du cours : <span class="font-normal text-gray-500"><%= sc.courseDate %></span>
                         </p>
-                        <p>Heure du cours : <%= sc.courseTime %>
+                        <p class="font-semibold text-gray-800">Heure du cours : <span class="font-normal text-gray-500"><%= sc.courseTime %></span>
                         </p>
-                        <p>Inscrit le : <%= sc.registeredAt %>
+                        <p class="font-semibold text-gray-800">Inscrit le : <span class="font-normal text-gray-500"><%= sc.registeredAt %></span>
                         </p>
-                        <p>Signé le : <%= sc.signedAt ? sc.signedAt : "Pas signé" %>
+                        <p class="font-semibold text-green-700">
+                            <% if (sc.signedAt) { %>
+                                Signé le : <span class="font-normal text-gray-500"><%= sc.signedAt %></span>
+                                    <% } else { %>
+                                        <span class="font-semibold text-red-700">Pas signé</span>
+                                        <% } %>
                         </p>
                     </div>
                     <% }); %>
+
             </div>
             <div id="addStudentCourses" class="hidden">
                 ajouter signature
