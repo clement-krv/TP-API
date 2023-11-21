@@ -6,7 +6,8 @@
 
                     <ul class="mt-6 space-y-1">
                         <li>
-                            <a href="" class="block rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                            <a id="linkmain" href="#"
+                                class="block rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
                                 Acceuil
                             </a>
                         </li>
@@ -124,10 +125,84 @@
             </div>
 
             <div id="allUser" class="hidden">
-                Tout les user
+                <div class="overflow-x-auto flex justify-center mt-5">
+                    <table class="min-w-fit divide-y-2 divide-gray-200 bg-white text-sm">
+                        <thead class="ltr:text-left rtl:text-right">
+                            <tr>
+                                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                                    Email
+                                </th>
+                                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                                    Role
+                                </th>
+                                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                                    Action
+                                </th>
+                                <th class="px-4 py-2"></th>
+                            </tr>
+                        </thead>
+                        <% users.forEach(function(user) { %>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center">
+                                        <%= user.email %>
+                                    </td>
+                                    <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
+                                        <%= user.role %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                    </table>
+                </div>
             </div>
             <div id="addUser" class="hidden">
-                ajouter utilisateur
+                <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+                    <div class="mx-auto max-w-lg text-center">
+                        <h1 class="text-2xl font-bold sm:text-3xl">Ajouter un utilisateur</h1>
+                    </div>
+
+                    <form method="post" action="/addUser" class="mx-auto mb-0 mt-8 max-w-md space-y-4">
+                        <div>
+                            <label for="email" class="sr-only">Email</label>
+
+                            <div class="relative">
+                                <input type="email" name="email"
+                                    class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                                    placeholder="Enter email" />
+
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="password" class="sr-only">mot de passe</label>
+
+                            <div class="relative">
+                                <input type="password" name="password"
+                                    class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                                    placeholder="Enter password" />
+
+                            </div>
+                        </div>
+
+                        <label for="role"
+                            class="block mb-2 text-sm font-medium text-gray-900">Choisissez un role</label>
+                        <select id="role" name="role"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                            <option value="STUDENT">Etudiant</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+
+
+                        <div class="flex items-center">
+
+                            <button type="submit"
+                                class="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white">
+                                Ajouter utilisateur
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div id="allCourses" class="hidden">
                 Tout les cours
@@ -200,7 +275,7 @@
             addStudentCoursesDiv.classList.remove('hidden');
         }
 
-        document.getElementById('main').addEventListener('click', function (event) {
+        document.getElementById('linkmain').addEventListener('click', function (event) {
             event.preventDefault();
             showMainDiv();
         });

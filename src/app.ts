@@ -187,7 +187,10 @@ userRouter.post('/login', (req, res) => {
   }
 
   if (user.role === 'ADMIN') {
-    res.render('admin');
+    const users = db.get('users').value();
+    const courses = db.get('courses').value();
+    const studentCourses = db.get('studentCourses').value();
+    res.render('admin', { users, courses, studentCourses });
   } else if (user.role === 'STUDENT') {
     const studentCourses = db.get('studentCourses').filter({ studentId: user.id }).value();
     const studentCourse = db.get('studentCourses').find({ studentId: user.id }).value();
@@ -222,6 +225,33 @@ userRouter.post('/sign-course', (req, res) => {
     .write();
 
   res.send({ message: 'Cours signé avec succès' });
+});
+
+userRouter.post('/addUser', (req, res) => {
+  let newUser: User;
+
+  try {
+      newUser = userSchema.validateSync(req.body);
+  } catch (error) {
+      if (error instanceof yup.ValidationError) {
+          return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
+      }
+      return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
+  }
+
+  newUser = userSchema.cast(newUser);
+
+  const existingUser = db.get('users').find({ email: newUser.email }).value();
+  if (existingUser) {
+      return res.status(409).send({ message: 'Un utilisateur avec cet email existe déjà' });
+  }
+
+  const newId = db.get('users').size().value() + 1;
+  newUser.id = newId;
+
+  db.get('users').push(newUser).write();
+
+  res.status(201).send({ message: 'Utilisateur ajouté avec succès' });
 });
 
 app.use(express.json());
