@@ -1,8 +1,9 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import basicAuth from 'express-basic-auth';
-import low, { LowdbSync } from 'lowdb';
-import FileSync from 'lowdb/adapters/FileSync';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as basicAuth from 'express-basic-auth';
+import * as low from 'lowdb';
+import { LowdbSync } from 'lowdb';
+import * as FileSync from 'lowdb/adapters/FileSync';
 import * as yup from 'yup';
 
 interface User {
@@ -45,20 +46,6 @@ const basicAuthUsers = users.reduce((acc: { [key: string]: string }, user: User)
   return acc;
 }, {});
 
-app.use(basicAuth({
-  users: basicAuthUsers,
-  challenge: true,
-  unauthorizedResponse: 'Nom d\'utilisateur ou mot de passe incorrect',
-}));
-
-app.use((req: any, res, next) => {
-  const authenticatedUser = users.find(user => user.email === req.auth.user);
-  if (authenticatedUser) {
-    req.user = authenticatedUser;
-  }
-  next();
-});
-
 const userSchema = yup.object().shape({
   email: yup.string().email().required().defined(),
   password: yup.string().required().defined(),
@@ -78,6 +65,21 @@ const studentCourseSchema = yup.object().shape({
   signedAt: yup.string().matches(/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/, 'La date et l\'heure doivent être au format jj/mm/AAAA HH:MM').nullable().default(null),
 }).noUnknown().strict().required().defined();
 
+
+app.use(basicAuth({
+  users: basicAuthUsers,
+  challenge: true,
+  unauthorizedResponse: 'Nom d\'utilisateur ou mot de passe incorrect',
+}));
+
+app.use((req: any, res, next) => {
+  const authenticatedUser = users.find(user => user.email === req.auth.user);
+  if (authenticatedUser) {
+    req.user = authenticatedUser;
+  }
+  next();
+});
+
 function checkRole(role: string) {
   return (req: any, res: any, next: any) => {
     if (req.user.role !== role) {
@@ -95,7 +97,7 @@ app.post('/add-users', checkRole('ADMIN'), async (req, res) => {
   let newUser: User;
 
   try {
-    newUser = userSchema.validateSync(req.body);
+    newUser = userSchema.validateSync(req.body) as User;
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
@@ -103,7 +105,7 @@ app.post('/add-users', checkRole('ADMIN'), async (req, res) => {
     return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
-  newUser = userSchema.cast(newUser);
+  newUser = userSchema.cast(newUser) as User;
 
   const existingUser = db.get('users').find({ email: newUser.email }).value();
   if (existingUser) {
@@ -127,7 +129,7 @@ app.post('/add-courses', checkRole('ADMIN'), (req, res) => {
   let newCourse: Course;
 
   try {
-    newCourse = courseSchema.validateSync(req.body);
+    newCourse = courseSchema.validateSync(req.body) as Course;
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
@@ -135,7 +137,7 @@ app.post('/add-courses', checkRole('ADMIN'), (req, res) => {
     return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
-  newCourse = courseSchema.cast(newCourse);
+  newCourse = courseSchema.cast(newCourse) as Course;
 
   const newId = db.get('courses').size().value() + 1;
   newCourse.id = newId;
@@ -157,7 +159,7 @@ app.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
   }
 
   try {
-    newStudentCourse = studentCourseSchema.validateSync(newStudentCourse);
+    newStudentCourse = studentCourseSchema.validateSync(newStudentCourse) as StudentCourse;
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       return res.status(400).send({ message: 'Les données fournies sont invalides : ' + error.errors.join(', ') });
@@ -165,7 +167,7 @@ app.post('/add-studentcourse', checkRole('ADMIN'), (req, res) => {
     return res.status(500).send({ message: 'Une erreur inattendue s\'est produite' });
   }
 
-  newStudentCourse = studentCourseSchema.cast(newStudentCourse);
+  newStudentCourse = studentCourseSchema.cast(newStudentCourse) as StudentCourse;
 
   const existingCourse = db.get('courses').find({ id: newStudentCourse.courseId }).value();
   if (!existingCourse) {

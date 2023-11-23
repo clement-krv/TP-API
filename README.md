@@ -28,17 +28,7 @@ Pour lancer le projet, il faut lancer la commande suivante :
 npm run start
 ```
 
-Pensez a actualiser votre page après chaque ajout ou modification de données.
-
-Quand vous allez ajouter ou modifié une donné vous allez être redirigé vers une page qui affiche du texte en JSON, lisez ce que le texte vous dis , retournez en arrière et actualisez la page.
-
-Je n'est pas réussi a faire en sorte d'ajouter des message flash pour les erreurs, donc je vous ai mis des messages en JSON,  après l'ajout d'une donnée, je n'est pas réussi a faire en sorte que la page se rafraichisse automatiquement, donc il faut le faire manuellement.
-
-## API
-
-Utiliser le fichier *.postman_collection.json* et mettre ça dans postman pour tester les endpoints.
-
-**Si vous avez un bug, merci de me le signaler.**
+Utilisez le fichier *TP-API.postman_collection.json* pour tester les endpoints.
 
 ## Auteur
 

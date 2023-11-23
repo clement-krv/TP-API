@@ -13,7 +13,7 @@
       "id": 2
     },
     {
-      "email": "test@student.fr",
+      "email": "test@student",
       "password": "student",
       "role": "STUDENT",
       "id": 3
@@ -21,13 +21,13 @@
   ],
   "courses": [
     {
-      "title": "test",
+      "title": "Angular",
       "date": "01-01-2001",
       "heure": "18:00",
       "id": 1
     },
     {
-      "title": "Angular",
+      "title": "test",
       "date": "01-01-2001",
       "heure": "18:00",
       "id": 2
@@ -40,6 +40,13 @@
       "courseId": 2,
       "studentId": 3,
       "id": 1
+    },
+    {
+      "signedAt": "23/11/2023 18:20",
+      "registeredAt": "23/11/2023 18:20",
+      "courseId": 2,
+      "studentId": 2,
+      "id": 2
     }
   ]
 }
